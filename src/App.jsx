@@ -662,19 +662,31 @@ const PortfolioPreview = ({
 const PortfolioModelPreview = ({
   previewImage,
   title,
-}) => (
-  <div aria-hidden="true" className="portfolio-model-preview">
-    <div className="portfolio-model-preview__image-shell">
-      <img
-        alt={`Exemplo visual para ${title}`}
-        className="portfolio-model-preview__image"
-        loading="lazy"
-        src={previewImage}
-      />
-      <div className="portfolio-model-preview__image-overlay"></div>
+}) => {
+  const mobilePreviewImage = previewImage.includes('-hq.webp')
+    ? previewImage.replace('-hq.webp', '.webp')
+    : previewImage
+
+  return (
+    <div aria-hidden="true" className="portfolio-model-preview">
+      <div className="portfolio-model-preview__image-shell">
+        <picture>
+          <source media="(max-width: 900px)" srcSet={mobilePreviewImage} />
+          <img
+            alt={`Exemplo visual para ${title}`}
+            className="portfolio-model-preview__image"
+            decoding="async"
+            fetchPriority="low"
+            loading="lazy"
+            sizes="(max-width: 640px) calc(100vw - 56px), (max-width: 900px) 360px, 440px"
+            src={previewImage}
+          />
+        </picture>
+        <div className="portfolio-model-preview__image-overlay"></div>
+      </div>
     </div>
-  </div>
-)
+  )
+}
 
 const App = () => {
   const [isAppReady, setIsAppReady] = useState(false)
