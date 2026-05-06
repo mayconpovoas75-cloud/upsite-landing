@@ -5217,3 +5217,25 @@ img {
     font-size: 0.84rem;
   }
 }
+.portfolio-showcase__list {
+  display: grid;
+  gap: 18px;
+}
+
+.portfolio-card--static {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  box-shadow:
+    0 24px 58px rgba(4, 10, 20, 0.24),
+    0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.portfolio-card--static::after {
+  display: none;
+}
+
+.portfolio-card--static .portfolio-card__hover-cta {
+  opacity: 1;
+  transform: none;
+}

@@ -693,6 +693,7 @@ const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isHeaderSolid, setIsHeaderSolid] = useState(false)
   const [showFloatingWhatsApp, setShowFloatingWhatsApp] = useState(false)
+  const [isPortfolioCompact, setIsPortfolioCompact] = useState(false)
   const [activePortfolioIndex, setActivePortfolioIndex] = useState(0)
   const heroVisualRef = useRef(null)
   const portfolioTrackRef = useRef(null)
@@ -771,6 +772,19 @@ const App = () => {
     return () => {
       window.removeEventListener('resize', handleResize)
       window.removeEventListener('hashchange', closeMenu)
+    }
+  }, [])
+
+  useEffect(() => {
+    const syncPortfolioMode = () => {
+      setIsPortfolioCompact(window.innerWidth <= 900)
+    }
+
+    syncPortfolioMode()
+    window.addEventListener('resize', syncPortfolioMode)
+
+    return () => {
+      window.removeEventListener('resize', syncPortfolioMode)
     }
   }, [])
 
@@ -1015,6 +1029,61 @@ const App = () => {
       scrollPortfolioTo(activePortfolioIndex - 1)
     }
   }
+
+  const renderPortfolioCard = (
+    {
+      accent,
+      accentSoft,
+      badge,
+      benefit,
+      cta,
+      emotionalCopy,
+      microCopy,
+      previewImage,
+      title,
+    },
+    index,
+    interactive = true,
+  ) => (
+    <article
+      className={cn(
+        'portfolio-card',
+        interactive ? 'portfolio-card--carousel' : 'portfolio-card--static',
+        interactive && activePortfolioIndex === index && 'portfolio-card--active',
+      )}
+      data-portfolio-slide={interactive ? true : undefined}
+      key={title}
+      style={{
+        '--portfolio-accent': accent,
+        '--portfolio-accent-soft': accentSoft,
+      }}
+    >
+      <PortfolioModelPreview
+        previewImage={previewImage}
+        title={title}
+      />
+
+      <div className="portfolio-card__content">
+        <span className="portfolio-card__label">{badge}</span>
+        <h3>{title}</h3>
+        <p className="portfolio-card__benefit">{benefit}</p>
+        <p className="portfolio-card__microcopy">
+          {'\u{1F449}'} {microCopy}
+        </p>
+        <div className="portfolio-card__cta-row">
+          <span className="portfolio-card__emotional">{emotionalCopy}</span>
+          <a
+            className="portfolio-card__hover-cta"
+            href={buildPortfolioWhatsAppUrl(title)}
+            {...EXTERNAL_LINK_PROPS}
+          >
+            <span>{cta}</span>
+            <ArrowRight aria-hidden="true" size={16} />
+          </a>
+        </div>
+      </div>
+    </article>
+  )
 
   const currentYear = new Date().getFullYear()
 
@@ -1417,114 +1486,62 @@ const App = () => {
               <div className="portfolio-carousel__meta">
                 <span>Modelos premium</span>
                 <strong>
-                  {String(activePortfolioIndex + 1).padStart(2, '0')} /{' '}
-                  {String(portfolioCards.length).padStart(2, '0')}
+                  {isPortfolioCompact
+                    ? `${String(portfolioCards.length).padStart(2, '0')} modelos`
+                    : `${String(activePortfolioIndex + 1).padStart(2, '0')} / ${String(
+                        portfolioCards.length,
+                      ).padStart(2, '0')}`}
                 </strong>
               </div>
             </div>
 
-            <div
-              aria-label="Catalogo de modelos de sites por nicho"
-              className="portfolio-carousel__track"
-              onKeyDown={handlePortfolioKeyDown}
-              onPointerCancel={endPortfolioDrag}
-              onPointerDown={handlePortfolioPointerDown}
-              onPointerMove={handlePortfolioPointerMove}
-              onPointerUp={endPortfolioDrag}
-              onWheel={handlePortfolioWheel}
-              ref={portfolioTrackRef}
-              tabIndex={0}
-            >
-            {portfolioCards.map(
-              (
-                {
-                  accent,
-                  accentSoft,
-                  badge,
-                  benefit,
-                  cta,
-                  emotionalCopy,
-                  icon,
-                  microCopy,
-                  previewBrand,
-                  previewCta,
-                  previewDescription,
-                  previewEyebrow,
-                  previewImage,
-                  previewMenu,
-                  previewMobileCta,
-                  previewScene,
-                  previewSections,
-                  previewTags,
-                  previewTitle,
-                  previewVisualLabel,
-                  title,
-                },
-                index,
-              ) => (
-                <article
-                  className={cn(
-                    'portfolio-card',
-                    'portfolio-card--carousel',
-                    activePortfolioIndex === index && 'portfolio-card--active',
-                  )}
-                  data-portfolio-slide
-                  key={title}
-                  style={{
-                    '--portfolio-accent': accent,
-                    '--portfolio-accent-soft': accentSoft,
-                  }}
-                >
-                  <PortfolioModelPreview
-                    previewImage={previewImage}
-                    title={title}
-                  />
-
-                  <div className="portfolio-card__content">
-                    <span className="portfolio-card__label">{badge}</span>
-                    <h3>{title}</h3>
-                    <p className="portfolio-card__benefit">{benefit}</p>
-                    <p className="portfolio-card__microcopy">
-                      {'\u{1F449}'} {microCopy}
-                    </p>
-                    <div className="portfolio-card__cta-row">
-                      <span className="portfolio-card__emotional">{emotionalCopy}</span>
-                      <a
-                        className="portfolio-card__hover-cta"
-                        href={buildPortfolioWhatsAppUrl(title)}
-                        {...EXTERNAL_LINK_PROPS}
-                      >
-                        <span>{cta}</span>
-                        <ArrowRight aria-hidden="true" size={16} />
-                      </a>
-                    </div>
-                  </div>
-                </article>
-              ),
-            )}
-            </div>
-
-            <div className="portfolio-carousel__footer">
-              <p className="portfolio-carousel__hint">
-                Arraste para o lado e explore formatos pensados para o visitante se enxergar ali.
-              </p>
-
-              <div className="portfolio-carousel__dots" aria-label="Indicadores do carrossel">
-                {portfolioCards.map(({ title }, index) => (
-                  <button
-                    aria-label={`Ir para ${title}`}
-                    aria-pressed={activePortfolioIndex === index}
-                    className={cn(
-                      'portfolio-carousel__dot',
-                      activePortfolioIndex === index && 'is-active',
-                    )}
-                    key={title}
-                    onClick={() => scrollPortfolioTo(index)}
-                    type="button"
-                  />
-                ))}
+            {isPortfolioCompact ? (
+              <div
+                aria-label="Catalogo de modelos de sites por nicho"
+                className="portfolio-showcase__list"
+              >
+                {portfolioCards.map((card, index) => renderPortfolioCard(card, index, false))}
               </div>
-            </div>
+            ) : (
+              <>
+                <div
+                  aria-label="Catalogo de modelos de sites por nicho"
+                  className="portfolio-carousel__track"
+                  onKeyDown={handlePortfolioKeyDown}
+                  onPointerCancel={endPortfolioDrag}
+                  onPointerDown={handlePortfolioPointerDown}
+                  onPointerMove={handlePortfolioPointerMove}
+                  onPointerUp={endPortfolioDrag}
+                  onWheel={handlePortfolioWheel}
+                  ref={portfolioTrackRef}
+                  tabIndex={0}
+                >
+                  {portfolioCards.map((card, index) => renderPortfolioCard(card, index, true))}
+                </div>
+
+                <div className="portfolio-carousel__footer">
+                  <p className="portfolio-carousel__hint">
+                    Arraste para o lado e explore formatos pensados para o visitante se enxergar ali.
+                  </p>
+
+                  <div className="portfolio-carousel__dots" aria-label="Indicadores do carrossel">
+                    {portfolioCards.map(({ title }, index) => (
+                      <button
+                        aria-label={`Ir para ${title}`}
+                        aria-pressed={activePortfolioIndex === index}
+                        className={cn(
+                          'portfolio-carousel__dot',
+                          activePortfolioIndex === index && 'is-active',
+                        )}
+                        key={title}
+                        onClick={() => scrollPortfolioTo(index)}
+                        type="button"
+                      />
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
           </div>
 
           <p className="portfolio-carousel__microcopy reveal" data-reveal>
