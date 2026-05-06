@@ -1,0 +1,10 @@
+.edge-debug
+.vite-temp
+dist
+exports
+outputs
+sheet_rebuild
+lead_enrichment
+localhost-run*.log
+*.err.log
+*.out.log
