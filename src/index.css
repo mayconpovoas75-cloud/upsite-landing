@@ -634,53 +634,6 @@ img {
   font-weight: 700;
 }
 
-.hero-proof {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-top: 26px;
-}
-
-.hero-proof__avatars {
-  display: flex;
-  align-items: center;
-}
-
-.hero-proof__avatars img {
-  width: 34px;
-  height: 34px;
-  margin-left: -8px;
-  border: 2px solid rgba(7, 11, 18, 0.95);
-  border-radius: 999px;
-  background: #0f1724;
-  object-fit: cover;
-  object-position: center;
-  box-shadow:
-    0 10px 24px rgba(18, 167, 255, 0.16),
-    0 0 0 1px rgba(255, 255, 255, 0.03);
-}
-
-.hero-proof__avatars img:first-child {
-  margin-left: 0;
-}
-
-.hero-proof__content {
-  display: grid;
-  gap: 6px;
-}
-
-.hero-proof__stars {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  color: #17a8ff;
-}
-
-.hero-proof__content span {
-  color: rgba(255, 255, 255, 0.76);
-  font-size: 0.9rem;
-}
-
 .hero-sequence {
   opacity: 1;
   transform: translateY(0);
@@ -3602,10 +3555,6 @@ img {
     font-size: 0.94rem;
   }
 
-  .hero-proof {
-    margin-top: 22px;
-  }
-
   .hero-seals,
   .benefits-list,
   .seal-grid,
@@ -3844,12 +3793,6 @@ img {
     padding-top: 0;
   }
 
-  .hero-proof {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-
   .hero-stage__copy {
     padding: 24px 18px 8px;
   }
@@ -3924,8 +3867,7 @@ img {
     gap: 10px;
   }
 
-  .hero-copy__price-tag,
-  .hero-proof {
+  .hero-copy__price-tag {
     margin-top: 18px;
   }
 
@@ -4127,10 +4069,6 @@ img {
 
   .brand__logo {
     width: 152px;
-  }
-
-  .hero-proof__content span {
-    font-size: 0.84rem;
   }
 
   .hero-stage__headline {

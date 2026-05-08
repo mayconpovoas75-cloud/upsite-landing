@@ -1218,29 +1218,6 @@ const App = () => {
                 <span>Sites a partir de R$397</span>
               </div>
 
-              <div className="hero-proof hero-sequence" style={{ '--sequence-index': 10 }}>
-                <div className="hero-proof__avatars" aria-hidden="true">
-                  {heroProofAvatars.map((avatarSrc, index) => (
-                    <img
-                      alt=""
-                      decoding="async"
-                      height="34"
-                      key={avatarSrc}
-                      loading="lazy"
-                      src={avatarSrc}
-                      width="34"
-                    />
-                  ))}
-                </div>
-                <div className="hero-proof__content">
-                  <div className="hero-proof__stars" aria-hidden="true">
-                    {Array.from({ length: 5 }).map((_, index) => (
-                      <Star fill="currentColor" key={index} size={14} />
-                    ))}
-                  </div>
-                  <span>+200 negocios impulsionados</span>
-                </div>
-              </div>
             </div>
 
             <div
